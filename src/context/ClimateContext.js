@@ -17,10 +17,10 @@ export default function ClimateProvider({ children }) {
        const timer = setTimeout(()=>{
         setChangeTemp((prevTemp)=>{
             if(prevTemp > temperature) {
-                return prevTemp-1
+                return prevTemp - 1
             }
             if(prevTemp < temperature) {
-                return prevTemp+1
+                return prevTemp + 1
             }
             if(prevTemp === temperature) {
                 clearTimeout(timer);
@@ -34,21 +34,25 @@ export default function ClimateProvider({ children }) {
     useEffect(()=>{
         const timer = setTimeout(()=>{
             setChangeHumid((prevHumid)=>{
-             if(prevHumid > humidity) {
-                 return prevHumid -2
-             }
-             if(prevHumid < humidity) {
-                 return prevHumid +2
-             }
-             if(prevHumid === humidity) {
+            if(prevHumid - humidity === 1 || prevHumid - humidity === -1) {
+                if(changeHumid > humidity) return changeHumid - 1
+                if(changeHumid < humidity) return changeHumid + 1
+            }
+            if(prevHumid > humidity) {
+                return prevHumid - 2
+            }
+            if(prevHumid < humidity) {
+                return prevHumid + 2
+            }
+            if(prevHumid === humidity) {
                  clearTimeout(timer);
                  return prevHumid
-             }
-             return prevHumid
+            }
+            return prevHumid
          });
         }, 1000);
         return ()=>{clearTimeout(timer)};
-     }, [humidity, changeHumid, setHumidity])
+    }, [humidity, changeHumid, setHumidity])
 
     return (
         <ClimateContext.Provider value={{temperature, setTemperature, humidity, setHumidity, changeTemp, changeHumid}}>
